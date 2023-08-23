@@ -1,0 +1,34 @@
+
+* Emulador de terminal 
+- Para usar una terminal en un ambiente gráfico
+- Hay diferentes tipos, varían en cosas como cuántos colores manejan,
+  eficiencia en manejo de texto, soporte para mouse, etc.
+- Populares: konsole, gmome terminal, alacritty, etc. 
+
+* TTY
+- Es una terminal física
+- En linux tienes acceso a diferentes ttys con el shortcut C-alt-F(1,2,...7)
+
+* Shell
+- Es un interprete de algún lenguaje de shell
+- Lenguajes populares: bash, zsh, fish, powershell, batch
+
+* Prompt
+- Es en si el cursor en la terminar que indica el punto donde se puede
+  empezar a escribir texto
+- Usualmente va acompañado de información extra como el directorio
+  actual, usuario y tipo de usuario:
+  + $ cualquier usuario menos root
+  + # root
+
+* Tipos de comando
+- Sistema: están en algún directorio, son programas, usualmente
+  binarios
+- built-in: ya los trae el shell, no están en algún directorio
+
+
+* Comandos
+- Lo primero que escribes en la línea de comandos es el nombre del
+  comando
+- Luego puedes escribir parámetros separados por espacios
+

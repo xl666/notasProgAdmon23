@@ -1,0 +1,16 @@
+* NOS
+** GNU/Linux
+- RHEL (Red Hat Entreprise Linux)
+- Alma Linux
+- Ubuntu Server
+- Debian
+
+** Microsoft
+- Windows server (vendor locking)
+
+** BSD
+- NetBSD
+- FreeBSD
+
+
+

@@ -31,4 +31,122 @@
 - Lo primero que escribes en la línea de comandos es el nombre del
   comando
 - Luego puedes escribir parámetros separados por espacios
+** Tipos de parámetros
+- Posicionales: la posición del parámetro importa
+- Opciones/keywords/modificadores:
+  + Significan opciones extra, usualmente no son obligatorias 
+  + No suele importar mucho la posición
+  + Se utiliza - seguido de una letra o -- seguido de una palabra
+- Variables: en un conjunto de parámetros
+  
+** Cómo leer ayuda
+- []: el parámetro puede ir o no, es opcional
+- ... : Número variable
+- | : or, indica que se puede una cosa u otra
 
+
+* Combinaciones extra de teclado
+- C-a: ir a inicio de la línea
+- C-e: ir al final de la línea
+- C-k: cortar la línea desde posición del cursor
+- C-izquierda o derecha: moverte por un argumento (no soportada en todos lados)
+- C-shift-c o v: copiar o pegar (no soportada en todos lados)
+  
+* Permisos
+- Los permisos se dividen en 3 grupos
+  + Permisos del propietario:
+    * Todos los archivos tienen uno y sólo un propietario
+  + Permisos del grupo
+    * Todos los archivos tienen uno y sólo un grupo
+  + Permisos de cualquier otro usuario
+    * Para todos los demás casos
+- Hay tres tipos de permisos:
+  + Lectura:
+    * puedes leer el contenido
+    * comandos como cat van a funcionar
+    * Se identifica cor "r" o con el número 4 (en octal)
+  + Escritura
+    * Si el directorio tiene el permiso puedes crear achivos ahí
+    * Si es un archivo normal, el permiso permite modificar el contenido
+    * Se identifica con w o con el número 2 (en octal)
+  + Ejecución
+    * Para que sea posible ejecutarlo cuando es un archivo
+    * Si es un directorio el permiso permite moverte a ese directorio
+    * Se identifica con x o con 1 (en octal)
+- Los procesos al igual que los archivos tienen un usuario asociado
+  + Siempre que ejecutas algo se toma como referencia los permisos del usuario que ejecuta
+** Comandos
+*** chown
+#+begin_src bash :session *bash* :results output :exports both :tangle /tmp/test.sh
+- Cambia el propietario de un archivo
+  chown nuevoPropietario archivo...
+  chown -R nuevopropietario directorio...
+
+#+end_src
+*** chgrt
+#+begin_src bash :session *bash* :results output :exports both :tangle /tmp/test.sh
+  chgrt nuevoGrupo archivo...
+
+#+end_src
+*** chmod
+- La forma de aplicar permisos puede ser mediante sumas de números octales 
+#+begin_src bash :session *bash* :results output :exports both :tangle /tmp/test.sh
+  chmod permisos archivo
+  chmod 755 nuevo.txt # permisos rwxr-xr-x
+  chmod 000 nuevo.txt # sin permisos, excepto root
+  chmod 777 nuevo.txt # todos los permisos, no usar
+#+end_src
+- Otra forma alterna
+  #+begin_src bash :session *bash* :results output :exports both :tangle /tmp/test.sh
+    chmod +x script.sh # dar permisos de ejecución a todos
+    chmod -x script.sh # quitar permiso a todos
+    chmod +xr script.sh # dar dos permisos
+  #+end_src
+
+* cp
+#+begin_src bash :session *bash* :results output :exports both :tangle /tmp/test.sh
+   cp achivo1 achivo2 directorio # copia dos archivos a destino
+   cp -R directorioFuente directorioDestino # hace copia
+  recursiva
+  cp achivoOriginal directorio/nuevoNombre # copia cambiando nombre
+#+end_src
+
+* mv
+- Igual que cp en casi todo
+- mv no crea achivos nuevos
+#+begin_src bash :session *bash* :results output :exports both :tangle /tmp/test.sh
+   mv achivo1 achivo2 directorio # mueve dos archivos a destino
+   mv -R directorioFuente directorioDestino #  mueve de forma
+  recursiva
+  mv achivoOriginal directorio/nuevoNombre # renombrar
+#+end_src  
+
+* rm
+#+begin_src bash :session *bash* :results output :exports both :tangle /tmp/test.sh
+  rm achivo
+  rm archivo1 archivo2
+  rmdir directorio # si el directorio está vacío
+  rm -R directorio # borrado recursivo
+#+end_src
+
+* mkdir
+#+begin_src bash :session *bash* :results output :exports both :tangle /tmp/test.sh
+  mkdir directorioNuevo
+mkdir -p directorioNuevo/subNuevo/subSubNuevo # crea todos los niveles, si algún nivel ya existe no falla 
+#+end_src
+
+* Redirección de flujo
+- Todos los procesos tienen flujos
+- Hay 3 flujos estándar que siempre están ahí (cada proceso tiene 3
+  flujos):
+  + Salida estándar (stdout)
+    * Por defecto la consola imprime a salida estándar (si tienes un
+      comando que genera texto la verás en pantalla)
+    * Por ejemplo cada vez que imprimen en pantalla (print, printf,
+      cout) se usa salida estándar
+  + Entrada estándar (stdin)
+    * Cada vez que se pide entrada por teclado, se utiliza este flujo
+      (por ejemplo con cin o input, read)
+  + Salida de error (stderr)
+    * Similar al de stdout con la diferencia de que sólo es para errores
+    * El flujo también conectado a la consola 

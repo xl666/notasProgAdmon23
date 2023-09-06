@@ -1,0 +1,71 @@
+* Cosas básicas
+- Los espacios importan e importan mucho, su mal manejo es la principal fuente de errores
+- No hay tipos de datos en el sentido tradicional, todo son cadenas (o casi), esto es igual en la línea de comandos
+- Casi todo es basado en comandos, hasta sentencias de control, las partes son parámetros
+
+* Variables
+- El valor de una variable que no existe es cadena vacía
+- Hay distinción entre mayúsculas y minúsculas
+- No puedes empezar el nombre de una variable con un número
+- Símbolo de $ no se puede usar en el nombre
+- Para expandir el valor de una variable se utiliza $
+- Como muchas cosas son cadenas las concatenaciones son muy simples
+
+  #+begin_src bash :session *bash* :results output :exports both :tangle /tmp/test.sh
+    var=hola
+    var2=mundo
+    echo $var-$var2 $var
+
+    cd /home/$USER
+    pwd
+  #+end_src
+
+#+RESULTS:
+: hola-mundo hola
+: /home/xl666
+
+#+RESULTS:
+: hola-mundo hola
+
+#+RESULTS:
+: hola-mundo       hola
+
+#+RESULTS:
+: hola-mundo hola
+
+#+RESULTS:
+: hola-mundo
+
+#+RESULTS:
+: org_babel_sh_prompt> hola-mundo
+
+#+RESULTS:
+: holamundo
+
+#+RESULTS:
+: bash: =hola: orden no encontrada
+: bash: =mundo: orden no encontrada
+
+
+** Capturar stdout en una variable
+- Se captura toda la salida, osea todas las líneas 
+#+begin_src bash :session *bash* :results output :exports both :tangle /tmp/test.sh
+
+  saludo=$(echo hola mundo)
+  echo $saludo
+
+  salida=$(ls | grep -E "txt$")
+  echo $salida
+
+  cd /tmp
+  salida=$(ls)
+  echo $salida
+#+end_src
+
+#+RESULTS:
+: hola mundo
+: org_babel_sh_prompt>
+: 
+: org_babel_sh_prompt> org_babel_sh_prompt>
+: babel-4ixl6O babel-stable-463 birdtray.ulduzsoft.single.instance.server.socket checkup-db-1000 emacs1000 hsperfdata_xl666 icons insync1000.sock polybar_mqueue.847 sddm-:0-cnQmlN sddm-auth-ea360513-3b48-4a79-94e4-6c0c4a195705 straight-stderr-605 systemd-private-7eddff839c304c9a92ce1f22e3e5ff76-bluetooth.service-BfBkMt systemd-private-7eddff839c304c9a92ce1f22e3e5ff76-ModemManager.service-cge4n0 systemd-private-7eddff839c304c9a92ce1f22e3e5ff76-polkit.service-ULC3cG systemd-private-7eddff839c304c9a92ce1f22e3e5ff76-systemd-logind.service-cnsy2s systemd-private-7eddff839c304c9a92ce1f22e3e5ff76-upower.service-x3Txmc xauth_fHNZqF
+  

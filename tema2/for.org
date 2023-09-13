@@ -1,0 +1,110 @@
+#+title: For en bash
+
+* Forma básica
+- 3 iteraciones
+#+begin_src bash :session *bash* :results output :exports both :tangle /tmp/test.sh
+  for elemento in naranja toronja mandarina; do
+      echo "$elemento"
+  done
+#+end_src
+
+#+RESULTS:
+: naranja
+: toronja
+: mandarina
+
+- 1 iteración, cuidado
+  #+begin_src bash :session *bash* :results output :exports both :tangle /tmp/test.sh
+  for elemento in "naranja toronja mandarina"; do
+      echo "$elemento"
+  done
+  #+end_src
+
+#+RESULTS:
+: naranja toronja mandarina
+
+- iterar archivos (forma incorrecta, no usar nunca)
+- si hay espacios en el nombre de los archivos no funciona bien
+  #+begin_src bash :session *bash* :results output :exports both :tangle /tmp/test.sh
+    for archivo in $(ls /tmp); do
+        echo "$archivo"
+    done
+  #+end_src
+
+#+RESULTS:
+#+begin_example
+babel-cv67vm
+babel-stable-340
+birdtray.ulduzsoft.single.instance.server.socket
+checkup-db-1000
+emacs1000
+hsperfdata_xl666
+icons
+insync1000.sock
+polybar_mqueue.843
+sddm-:0-RrgVOk
+sddm-auth-eefba35f-fea8-43ae-a390-3f9df6426b38
+straight-stderr-606
+systemd-private-3d938c05307b49bf89e644addf10eb73-bluetooth.service-dywa24
+systemd-private-3d938c05307b49bf89e644addf10eb73-ModemManager.service-QfkfeY
+systemd-private-3d938c05307b49bf89e644addf10eb73-polkit.service-51GakD
+systemd-private-3d938c05307b49bf89e644addf10eb73-systemd-logind.service-V3SJLB
+systemd-private-3d938c05307b49bf89e644addf10eb73-upower.service-xI96Ij
+xauth_igPjQp
+#+end_example
+
+- no funciona bien, hay un archivo que tiene espacios en nombre o ruta
+  #+begin_src bash :session *bash* :results output :exports both :tangle /tmp/test.sh
+    mkdir -p /tmp/nuevo
+    cd /tmp/nuevo
+    touch a.txt "otro achivo.txt"
+    for archivo in $(ls /tmp/nuevo); do
+        echo  "$archivo"
+    done
+  #+end_src
+
+#+RESULTS:
+: a.txt
+: otro
+: achivo.txt
+
+- Esto NO es una solución, hace una sola iteración
+#+begin_src bash :session *bash* :results output :exports both :tangle /tmp/test.sh
+  mkdir -p /tmp/nuevo
+  cd /tmp/nuevo
+  touch a.txt "otro achivo.txt"
+  iteraciones=0
+  for archivo in "$(ls /tmp/nuevo)"; do
+      echo  "$archivo"
+      let iteraciones=iteraciones+1
+  done
+  echo $iteraciones
+#+end_src
+
+#+RESULTS:
+: otro achivo.txt
+: 1
+
+* for similar a C
+
+- usa el comando seq
+- 10 iteraciones
+  #+begin_src bash :session *bash* :results output :exports both :tangle /tmp/test.sh
+    for i in $(seq 0 9); do
+        echo "$i"
+    done
+  #+end_src
+
+#+RESULTS:
+#+begin_example
+0
+1
+2
+3
+4
+5
+6
+7
+8
+9
+#+end_example

@@ -1,0 +1,98 @@
+#+title: if en bash
+
+* if de bloque
+
+#+begin_src bash :session *bash* :results output :exports both :tangle /tmp/test.sh
+
+  if echo hola; then
+    echo entra;
+    echo otra cosa;
+  fi
+
+  # versión con comando falso
+  if cat --xxxx /tmp/nada.txt; then
+      echo "no va a entrar"
+  else
+      echo "cae aquí"
+  fi
+
+
+#+end_src
+
+#+RESULTS:
+: hola
+: entra
+: otra cosa
+: cat: unrecognized option '--xxxx'
+: Pruebe 'cat --help' para más información.
+: cae aquí
+
+** Desechar salidas en evaluación de verdad/falsedad
+
+#+begin_src bash :session *bash* :results output :exports both :tangle /tmp/test.sh
+  if echo "hola" &> /dev/null; then
+      echo "salida limpia"
+  fi
+#+end_src
+
+#+RESULTS:
+: salida limpia
+
+* Comando de testing
+
+#+begin_src bash :session *bash* :results output :exports both :tangle /tmp/test.sh
+
+  touch /tmp/otro.txt
+  if test -f /tmp/otro.txt; then
+      echo "es un archivo normal"
+  fi
+
+  if [ -f /tmp/otro.txt ]; then
+      echo "es un archivo normal"
+  fi
+
+    if [[ -f /tmp/otro.txt ]]; then
+      echo "es un archivo normal"
+  fi
+
+#+end_src
+
+#+RESULTS:
+: es un archivo normal
+: es un archivo normal
+: es un archivo normal
+
+#+begin_src bash :session *bash* :results output :exports both :tangle /tmp/test.sh
+  touch /tmp/otro.txt
+  if test -f /tmp/otro.txt && test -w /tmp/otro.txt ; then
+      echo "es un archivo normal y se puede escribir"
+  fi
+
+  # se puede hacer todo en uno con [[
+  if  [[ -f /tmp/otro.txt && -w /tmp/otro.txt ]]; then
+      echo "es un archivo normal y se puede escribir"
+  fi
+#+end_src
+
+#+RESULTS:
+: es un archivo normal y se puede escribir
+: es un archivo normal y se puede escribir
+
+* Negación
+- Es un comando especial llamado !
+- Invierte el valor de verdad
+
+  #+begin_src bash :session *bash* :results output :exports both :tangle /tmp/test.sh
+    test -z ""
+    echo $?
+
+    ! test -z ""
+    echo $? 
+  #+end_src
+
+#+RESULTS:
+: 0
+: 1
+
+
+  

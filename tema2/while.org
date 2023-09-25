@@ -1,0 +1,79 @@
+#+title: while
+
+* Forma general
+
+#+begin_src bash :session *bash* :results output :exports both :tangle /tmp/test.sh
+  while comando; do
+      cuerpo;
+  done
+#+end_src
+
+- Se entra al bloque mientras "comando" sea verdadero
+- En algún momento el comando debe dejar de ser verdadero, sin caes en
+  un ciclo infinto, es posible que quieras ciclos infinitos en un
+  servicios 
+- Para que deje de ser verdadero debe haber algún cambio en el cuerpo 
+
+- Corre infinitamente:
+  #+begin_src bash :session *bash* :results output :exports both :tangle /tmp/test.sh
+    while test "true"; do
+        echo infinito;
+        sleep 1;  # duerme la ejecución un segundo
+    done
+  #+end_src
+
+- Corre tres veces
+  #+begin_src bash :session *bash* :results output :exports both :tangle /tmp/test.sh
+    iteraciones=0
+    while test $iteraciones -lt 3; do
+        echo "entra"
+        let iteraciones=iteraciones+1
+    done
+  #+end_src
+
+#+RESULTS:
+: entra
+: entra
+: entra
+
+* Leer archivos línea por línea
+- while se usa mucho para leer archivos línea por línea
+- con for esto es complicado:
+  #+begin_src bash :session *bash* :results output :exports both :tangle /tmp/test.sh
+    echo "hola mundo" > /tmp/entrada.txt
+    echo "esta es otra línea" >> /tmp/entrada.txt
+    echo "formato:de:línea" >> /tmp/entrada.txt
+
+    for linea in $(cat "/tmp/entrada.txt"); do
+        echo "$linea"
+    done
+  #+end_src
+
+#+RESULTS:
+
+: hola
+: mundo
+: esta
+: es
+: otra
+: línea
+: formato:de:línea
+
+- forma correcta con while:
+- se utiliaz el comando read
+
+  #+begin_src bash :session *bash* :results output :exports both :tangle /tmp/test.sh
+    echo "hola mundo" > /tmp/entrada.txt
+    echo "esta es otra línea" >> /tmp/entrada.txt
+    echo "formato:de:línea" >> /tmp/entrada.txt
+
+    while read -r linea; do
+        echo "$linea"
+    done < /tmp/entrada.txt
+  #+end_src
+
+#+RESULTS:
+: hola mundo
+: esta es otra línea
+: formato:de:línea
+

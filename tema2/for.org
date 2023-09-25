@@ -108,3 +108,27 @@ xauth_igPjQp
 8
 9
 #+end_example
+
+* Recorrer directorios
+- La forma recomendada es con globbing
+- Esta forma lidia bien con los espacios
+- Otro beneficio es que agrega la ruta a la salida (no hay que estar pegando la ruta como con ls)
+  #+begin_src bash :session *bash* :results output :exports both :tangle /tmp/test.sh
+    mkdir -p /tmp/nuevo
+    touch a.txt b.txt c.txt "a a.txt" "con espacios.txt" nada
+    ruta="/tmp/nuevo"
+    for archivo in "$ruta"/*; do
+        echo "$archivo";
+    done
+
+  #+end_src
+
+#+RESULTS:
+: /tmp/nuevo/a a.txt
+: /tmp/nuevo/aa.txt
+: /tmp/nuevo/a.txt
+: /tmp/nuevo/b.txt
+: /tmp/nuevo/con espacios.txt
+: /tmp/nuevo/c.txt
+: /tmp/nuevo/nada
+

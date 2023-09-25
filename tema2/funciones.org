@@ -1,0 +1,167 @@
+#+title: Funciones
+
+
+* Ejemplos básicos
+
+
+#+begin_src bash :session *bash* :results output :exports both :tangle /tmp/test.sh
+    function imprimir {
+        echo "$1";
+    }
+  imprimir "hola"
+  imprimir "mundo"
+
+  # otra forma
+  imprimir() {
+      echo "$1";
+  }
+
+  varios_params() {
+      echo "$1";
+      echo "$2";
+      echo "$3";
+  }
+#+end_src
+
+#+RESULTS:
+: hola
+: mundo
+
+* Regresar valores
+- Consejo: cuida que sólo haya un posible echo de retorno, de lo
+  contrario tu función no va a poder explotar composición 
+
+#+begin_src bash :session *bash* :results output :exports both :tangle /tmp/test.sh
+  sumar() {
+      op1="$1"
+      op2="$2"
+      res=$(( "$op1" + "$op2" ))
+      echo "$res"
+  }
+  sumar 4 5
+  sumar $(sumar 3 3) 3 # composición
+  var=$(sumar 2 2)
+
+# difícil que se puede hacer composición
+  mas_de_una_cosa() {
+      echo "Primer resultado";
+      echo "Segundo resultado";
+  }
+
+  mas_de_una_cosa
+#+end_src
+
+#+RESULTS:
+: 9
+: 9
+: Primer resultado
+: Segundo resultado
+
+* Uso de return
+- No es para regresar valores calculados, sino para establecer valor
+  de retorno
+- Muy útil en funciones booleanas, no usar otra cosa en esos casos
+- Considerar que el return termina la función, similar a exit en el
+  script (cuidado con el uso de exit en la función, lo que hace es
+  terminar el script)
+- Útil para manejar errores. Considerar que bash no tiene manejo de
+  excepciones, toca hacer los manejos a mano
+
+#+begin_src bash :session *bash* :results output :exports both :tangle /tmp/test.sh
+      es_directorio() {
+          archivo="$1"
+          test -d "$archivo" && return 0 || return 1;
+      }
+
+    es_directorio "/tmp" && echo "es directorio" || echo "no es directorio"
+    touch /tmp/nuevo.txt
+    es_directorio "/tmp/nuevo.txt" && echo "es directorio" || echo "no es directorio"
+
+  # se puede usar echo y return 
+    dividir() {
+        op1="$1"
+        op2="$2"
+        test "$op2" -eq 0 && return 1
+        echo $(( "$op1"/"$op2" ))
+        return 0 # opcional por defecto se regresa 0
+    }
+    resultado=$(dividir 3 0)
+    test $? -eq 0 && echo "todo ok: $resultado" || echo "hubo un error"
+#+end_src
+
+#+RESULTS:
+: es directorio
+: no es directorio
+: hubo un error
+
+* Recomendaciones
+- Nombra tus funciones de forma representativa de acuerdo al problema
+  que resuelves
+- El nombre debería darnos una idea de lo que hace la función
+- evita nombres muy cortos
+- usa verbos seguidos de sustantivos (registrar_usuario,
+  cambiar_nombre_archivos)
+- Si la función es booleana, utiliza una afirmación como nombre
+  (es_directorio, existe_usuario)
+- Utiliza algún estándar para separar palabras:
+  + snake case: usa guión bajo para separar, recomendable en bash
+  + camel case: usar mayúsculas para empezar una palabra: esDirectorio,  registrarUsuario
+
+* Ámbito
+- Es el lugar en el código donde puedes hacer referencia a un
+  identificador, como variables, funciones, etc.
+- Es bash sólo hay dos ámbitos: global y local a la función
+- Cuidado: una fuente de bugs muy común es el mal manejo de ámbito,
+  sobre todo del ámbito global
+- Evitar usar el ámbito global lo más posible
+- Siempre usa local en tus variables de funciones, esto evita el
+  clashing de nombres
+- clashing de nombres: cuando tienes dos cosas que se llaman igual sin
+  darte cuenta
+- Nunca modifiques variables globales dentro de una función, si lo
+  necesitas has una copia local (crea una variable local), si sólo vas
+  a leer el valor no hay tanto problema
+
+#+begin_src bash :session *bash* :results output :exports both :tangle /tmp/test.sh
+
+  global="hola"
+
+    saludar() {
+        echo "$global $1"
+    }
+
+    otra_fun() {
+        otra_var="nada" # cuidado es global
+    }
+
+    saludar "mundo"
+    otra_fun
+    echo "$otra_var"
+
+    fun_con_locales() {
+        local nueva="otra cosa"; 
+    }
+    
+    fun_con_locales
+    echo "$nueva" # la variable no existe en ámbito global
+#+end_src  
+
+#+RESULTS:
+: hola mundo
+: nada
+
+* Funciones de ayuda
+- Es buena práctica agregar una ayuda a los scripts que hacemos
+- Una función es un buen lugar para poner esta ayuda
+- Trata de seguir las convenciones de POSIX (son las que vimos en
+  clase)
+
+  #+begin_src bash :session *bash* :results output :exports both :tangle /tmp/test.sh
+    ayuda() {
+        echo "registrar_usuario.sh archivo"
+        echo "Parámetros:"
+        echo "   - archivo: es un achivo de texto con el formato: nombre:shell:home"
+    }
+
+    test -f "$1" || { echo "Se esperaba un archivo"; ayuda; exit 1; }
+  #+end_src

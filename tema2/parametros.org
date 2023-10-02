@@ -1,0 +1,52 @@
+#+title: Parámetros
+
+* Operadores de expansión
+
+   #+begin_src bash :session *bash* :results output :exports both :tangle /tmp/test.sh
+          var=hola
+
+          # remueve la cadena más corta que hace match con el patrón empezando en el inicio del valor
+          echo ${var#??}
+          echo ${var#??*} # la cadena más corta sigue siendo 2
+
+          # remueve la cadena más larga que hace match con el patrón empezando en el inicio del valor
+          echo ${var##??} # la cadena más larga es de longitud 2
+          echo ${var##??*} # la cadena más larga es todo
+          # solo nombre de archivo sin ruta
+          ruta=/tmp/nuvodir/.otro/archivo.txt
+          echo ${ruta##*/}
+          # solo extension
+          echo ${ruta##*.}
+
+          #remueve la cadena más corta que hace match con el patrón empezando en el final del valor
+          echo ${var%??}
+          # quitar extensión de la ruta
+          echo ${ruta%.*}
+
+          # remueve la cadena más larga que hace match con el patrón empezando en el final del valor
+          echo ${ruta%%.*} # cuidado con directorios ocultos
+
+     # remplaza con el remplazo la primera cadena que hace match, cuidado, es greedy
+          echo ${var/ho*/ga} # solo ga aunque no debería
+          echo ${var//ho*/ga} # solo ga
+
+          # Si no hay match te regresa lo mismo, esto es bueno, hace seguro el uso
+          otra=nada
+          echo ${nada##x*}
+
+   #+end_src
+
+#+RESULTS:
+#+begin_example
+la
+la
+la
+
+archivo.txt
+txt
+ho
+/tmp/nuvodir/.otro/archivo
+/tmp/nuvodir/
+ga
+ga
+#+end_example

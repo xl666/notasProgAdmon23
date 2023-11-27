@@ -1,0 +1,17 @@
+
+* Generar llaves
+#+begin_src bash :session *bash* :results output :exports both :tangle /tmp/test.sh
+  openssl genpkey -algorithm RSA -out privatekey.pem -pkeyopt rsa_keygen_bits:2048
+  openssl rsa -in privatekey.pem -pubout -out publickey.pem
+#+end_src
+
+* Firmar
+#+begin_src bash :session *bash* :results output :exports both :tangle /tmp/test.sh
+openssl dgst -sign privatekey.pem -out signature.bin -sha256 file.txt
+
+#+end_src
+
+* Verificar firma
+#+begin_src bash :session *bash* :results output :exports both :tangle /tmp/test.sh
+  openssl dgst -verify publickey.pem -signature signature.bin -sha256 file.txt
+#+end_src

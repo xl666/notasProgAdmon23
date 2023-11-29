@@ -1,0 +1,21 @@
+* Estados de los datos
+- En reposo (en un medio sólido)
+- En tránsito (se transmiten por red)
+- En uso  (en RAM)
+
+* Confidencialidad
+- Proteger la privacidad de los datos, osea que terceros no puedan
+  consumir los datos en caso de robo y interceptación
+- Cifrar: es una transformación de los datos reversible
+  + Simétrico: cifras y descifras con la misma llave
+  + Asimétricos: llave pública y privada, si cifras con privada,
+    descifras con pública y vise-versa
+* Autenticidad
+- Asegurarnos que las partes de un intercambio son las verdaderas
+- Firmas digitales: es una forma asimétrica, se firma con la llave
+  privada y se comprueba la firma con la llave pública correspondiente
+* Integridad
+- Funciones de hash
+- Las funciones de hash no son reversibles
+- Las funciones de hash seguras cumplen con diversas propiedades
+- Usar funciones de hash seguras como sha256 o sha512 
